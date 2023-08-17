@@ -9,24 +9,46 @@ namespace Tasks.ViewModels
     public class MainWindowViewModel : BindableBase
     {
         public DelegateCommand AddTheTask { get; set; }
-        public DelegateCommand<object> CheckedTheList { get; set; } 
+        public DelegateCommand TextboxFocused { get; set; }
+        public DelegateCommand<object> CheckedTheList { get; set; }
+        public DelegateCommand ClearCompletedTask { get; set; }
         public ObservableCollection<string> Tasks { get; set; }
+        public ObservableCollection<string> CompletedTasks { get; set; }
 
         public MainWindowViewModel()
         {
             AddTheTask = new DelegateCommand(AddingTheTask);
             CheckedTheList = new DelegateCommand<object>(DeleteTheTask);
+            TextboxFocused = new DelegateCommand(ClearTheTB);
+            ClearCompletedTask = new DelegateCommand(Clear);
             Tasks = new ObservableCollection<string>();
+            CompletedTasks = new ObservableCollection<string>();
+        }
+
+        private void Clear()
+        {
+            CompletedTasks.Clear();
+            UpdateUI();
+        }
+
+        private void ClearTheTB()
+        {
+            TextBoxText = string.Empty;
         }
 
         private void DeleteTheTask(object obj)
         {
-            MessageBox.Show(obj.ToString());
+            string? value = obj as string;
+            Tasks.Remove(value!);
+            CompletedTasks.Add(value!);
+            UpdateUI();
         }
 
         private void AddingTheTask()
         {
             Tasks.Add(TextBoxText!);
+            TextBoxText = string.Empty;
+            UpdateUI();
         }
 
         private string currentDate = DateTime.Now.ToString("MMMM dd', 'dddd");
@@ -36,11 +58,36 @@ namespace Tasks.ViewModels
             set { SetProperty(ref currentDate, value); }
         }
 
-        private string? textBoxText;
+        private string? textBoxText = "＋ Add Task";
         public string? TextBoxText
         {
             get { return textBoxText; }
             set { SetProperty(ref textBoxText, value); }
+        }
+
+        private string? headingText = "Tasks";
+        public string? HeadingText
+        {
+            get { return headingText; }
+            set { SetProperty(ref headingText, value); }
+        }
+
+        private Visibility completedTaskVisibility = Visibility.Collapsed;
+        public Visibility CompletedTaskVisibility
+        {
+            get { return completedTaskVisibility; }
+            set { SetProperty(ref completedTaskVisibility, value); }
+        }
+
+        public void UpdateUI()
+        {
+            if (Tasks.Count > 0)
+                HeadingText = $"{Tasks.Count} Tasks Yet to complete";
+            else HeadingText = "Tasks";
+
+            if (CompletedTasks.Count > 0)
+                CompletedTaskVisibility = Visibility.Visible;
+            else CompletedTaskVisibility = Visibility.Collapsed;
         }
     }
 }

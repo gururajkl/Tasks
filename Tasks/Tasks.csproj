@@ -5,7 +5,12 @@
 		<TargetFramework>net7.0-windows</TargetFramework>
 		<Nullable>enable</Nullable>
 		<UseWPF>true</UseWPF>
+		<ApplicationIcon>checklist_106575.ico</ApplicationIcon>
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <Content Include="checklist_106575.ico" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Prism.Unity" Version="8.1.97" />
