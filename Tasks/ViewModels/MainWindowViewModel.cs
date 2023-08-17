@@ -17,12 +17,18 @@ namespace Tasks.ViewModels
 
         public MainWindowViewModel()
         {
-            AddTheTask = new DelegateCommand(AddingTheTask);
+            AddTheTask = new DelegateCommand(AddingTheTask, canExecute).ObservesProperty(() => TextBoxText);
             CheckedTheList = new DelegateCommand<object>(DeleteTheTask);
             TextboxFocused = new DelegateCommand(ClearTheTB);
             ClearCompletedTask = new DelegateCommand(Clear);
             Tasks = new ObservableCollection<string>();
             CompletedTasks = new ObservableCollection<string>();
+        }
+
+        private bool canExecute()
+        {
+            if (string.IsNullOrEmpty(TextBoxText) || TextBoxText == "＋ Add Task") return false;
+            return true;
         }
 
         private void Clear()
