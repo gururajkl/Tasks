@@ -9,7 +9,14 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <Content Include="checklist_106575.ico" />
+		<None Remove="bell.wav" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Include="bell.wav">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="checklist_106575.ico" />
 	</ItemGroup>
 
 	<ItemGroup>

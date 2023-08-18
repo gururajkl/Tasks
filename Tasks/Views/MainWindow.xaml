@@ -62,6 +62,7 @@
 
         <StackPanel Grid.Row="1" Margin="0,10,0,10">
             <TextBox
+                Name="taskTextBox"
                 Padding="10"
                 FontSize="15"
                 Text="{Binding TextBoxText, UpdateSourceTrigger=PropertyChanged}">
@@ -82,6 +83,7 @@
                     </Style>
                 </TextBox.Resources>
             </TextBox>
+
             <Button
                 Margin="0,5,0,0"
                 Padding="10"
@@ -107,7 +109,11 @@
                                 Padding="15"
                                 Background="#DCDCDC"
                                 CornerRadius="5">
-                                <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+                                <StackPanel
+                                    VerticalAlignment="Center"
+                                    Cursor="Hand"
+                                    MouseDown="StackPanel_MouseDown"
+                                    Orientation="Horizontal">
                                     <Button
                                         Margin="0,0,10,0"
                                         Command="{Binding DataContext.CheckedTheList, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}}"
@@ -138,10 +144,10 @@
                                         <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
                                             <TextBlock
                                                 Margin="0,0,5,0"
-                                                FontSize="20"
+                                                FontSize="15"
                                                 Text="✔" />
                                             <TextBlock
-                                                FontSize="20"
+                                                FontSize="15"
                                                 Text="{Binding}"
                                                 TextDecorations="Strikethrough" />
                                         </StackPanel>
@@ -151,10 +157,9 @@
                         </ItemsControl>
                         <Button
                             Margin="0,5,0,0"
-                            Padding="10"
+                            Padding="8"
                             Command="{Binding ClearCompletedTask}"
-                            Content="Clear"
-                            FontSize="14">
+                            Content="Delete Completed Tasks">
                             <Button.Resources>
                                 <Style TargetType="Border">
                                     <Setter Property="CornerRadius" Value="3" />

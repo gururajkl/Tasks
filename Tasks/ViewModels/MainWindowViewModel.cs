@@ -2,6 +2,8 @@
 using Prism.Mvvm;
 using System;
 using System.Collections.ObjectModel;
+using System.IO;
+using System.Media;
 using System.Windows;
 
 namespace Tasks.ViewModels
@@ -48,6 +50,7 @@ namespace Tasks.ViewModels
             Tasks.Remove(value!);
             CompletedTasks.Add(value!);
             UpdateUI();
+            PlayBellSound();
         }
 
         private void AddingTheTask()
@@ -94,6 +97,17 @@ namespace Tasks.ViewModels
             if (CompletedTasks.Count > 0)
                 CompletedTaskVisibility = Visibility.Visible;
             else CompletedTaskVisibility = Visibility.Collapsed;
+        }
+
+        public static void PlayBellSound()
+        {
+            string soundFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "bell.wav");
+            SoundPlayer soundPlayer = new SoundPlayer(soundFilePath);
+            soundPlayer.Play();
+        }
+
+        private void ShowNotification(string title, string message)
+        {
         }
     }
 }
