@@ -1,10 +1,12 @@
 ﻿using Prism.Commands;
 using Prism.Mvvm;
+using Prism.Services.Dialogs;
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Media;
 using System.Windows;
+using Tasks.Models;
 
 namespace Tasks.ViewModels
 {
@@ -14,17 +16,29 @@ namespace Tasks.ViewModels
         public DelegateCommand TextboxFocused { get; set; }
         public DelegateCommand<object> CheckedTheList { get; set; }
         public DelegateCommand ClearCompletedTask { get; set; }
-        public ObservableCollection<string> Tasks { get; set; }
-        public ObservableCollection<string> CompletedTasks { get; set; }
+        public DelegateCommand<object> ClickedOnListItem { get; set; }
+        public ObservableCollection<ModelTask> Tasks { get; set; }
+        public ObservableCollection<ModelTask> CompletedTasks { get; set; }
 
-        public MainWindowViewModel()
+        public static int incrementTheCount = 1;
+        private readonly IDialogService dialogService;
+
+        public MainWindowViewModel(IDialogService dialogService)
         {
             AddTheTask = new DelegateCommand(AddingTheTask, canExecute).ObservesProperty(() => TextBoxText);
             CheckedTheList = new DelegateCommand<object>(DeleteTheTask);
             TextboxFocused = new DelegateCommand(ClearTheTB);
             ClearCompletedTask = new DelegateCommand(Clear);
-            Tasks = new ObservableCollection<string>();
-            CompletedTasks = new ObservableCollection<string>();
+            ClickedOnListItem = new DelegateCommand<object>(DetailViewOfTask);
+            Tasks = new ObservableCollection<ModelTask>();
+            CompletedTasks = new ObservableCollection<ModelTask>();
+
+            this.dialogService = dialogService;
+        }
+
+        private void DetailViewOfTask(object SelectedTask)
+        {
+            dialogService.ShowDialog("Detail");
         }
 
         private bool canExecute()
@@ -46,16 +60,20 @@ namespace Tasks.ViewModels
 
         private void DeleteTheTask(object obj)
         {
-            string? value = obj as string;
-            Tasks.Remove(value!);
-            CompletedTasks.Add(value!);
-            UpdateUI();
-            PlayBellSound();
+            if (obj != null)
+            {
+                ModelTask? selectedList = obj as ModelTask;
+                Tasks.Remove(selectedList!);
+                CompletedTasks.Add(selectedList!);
+                UpdateUI();
+                PlayBellSound();
+            }
         }
 
         private void AddingTheTask()
         {
-            Tasks.Add(TextBoxText!);
+            ModelTask newTask = new ModelTask() { TaskName = TextBoxText, Id = incrementTheCount++ };
+            Tasks.Add(newTask);
             TextBoxText = string.Empty;
             UpdateUI();
         }

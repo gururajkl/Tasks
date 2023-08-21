@@ -112,7 +112,6 @@
                                 <StackPanel
                                     VerticalAlignment="Center"
                                     Cursor="Hand"
-                                    MouseDown="StackPanel_MouseDown"
                                     Orientation="Horizontal">
                                     <Button
                                         Margin="0,0,10,0"
@@ -121,7 +120,12 @@
                                         Content=""
                                         Style="{StaticResource CircularButton}"
                                         ToolTip="Mark as done" />
-                                    <TextBlock FontSize="20" Text="{Binding}" />
+                                    <TextBlock FontSize="20" Text="{Binding TaskName}" />
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="MouseLeftButtonDown">
+                                            <prism:InvokeCommandAction Command="{Binding DataContext.ClickedOnListItem, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}}" CommandParameter="{Binding}" />
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
                                 </StackPanel>
                             </Border>
                         </DataTemplate>
@@ -148,7 +152,7 @@
                                                 Text="✔" />
                                             <TextBlock
                                                 FontSize="15"
-                                                Text="{Binding}"
+                                                Text="{Binding TaskName}"
                                                 TextDecorations="Strikethrough" />
                                         </StackPanel>
                                     </Border>
