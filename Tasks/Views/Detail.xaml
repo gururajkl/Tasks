@@ -15,10 +15,10 @@
         <TextBlock
             Padding="5"
             FontSize="25"
-            Text="Task Name" />
+            Text="{Binding TaskName}" />
         <TextBlock
             Padding="5"
             FontSize="20"
-            Text="Added Today at 8 AM" />
+            Text="{Binding DateTime}" />
     </StackPanel>
 </UserControl>

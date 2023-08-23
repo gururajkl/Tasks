@@ -38,7 +38,13 @@ namespace Tasks.ViewModels
 
         private void DetailViewOfTask(object SelectedTask)
         {
-            dialogService.ShowDialog("Detail");
+            DialogParameters p = new DialogParameters();
+            p.Add("model", SelectedTask as ModelTask);
+
+            dialogService.ShowDialog("Detail", p, r =>
+            {
+                // Feature yet to add.
+            });
         }
 
         private bool canExecute()
@@ -122,10 +128,6 @@ namespace Tasks.ViewModels
             string soundFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "bell.wav");
             SoundPlayer soundPlayer = new SoundPlayer(soundFilePath);
             soundPlayer.Play();
-        }
-
-        private void ShowNotification(string title, string message)
-        {
         }
     }
 }
