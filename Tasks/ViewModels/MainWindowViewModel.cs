@@ -3,6 +3,7 @@ using Prism.Mvvm;
 using Prism.Services.Dialogs;
 using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Media;
 using System.Windows;
@@ -22,6 +23,7 @@ namespace Tasks.ViewModels
 
         public static int incrementTheCount = 1;
         private readonly IDialogService dialogService;
+        private static string textBoxTextConst = "＋ Add Task";
 
         public MainWindowViewModel(IDialogService dialogService)
         {
@@ -49,7 +51,7 @@ namespace Tasks.ViewModels
 
         private bool canExecute()
         {
-            if (string.IsNullOrEmpty(TextBoxText) || TextBoxText == "＋ Add Task") return false;
+            if (string.IsNullOrEmpty(TextBoxText) || TextBoxText == textBoxTextConst) return false;
             return true;
         }
 
@@ -91,7 +93,7 @@ namespace Tasks.ViewModels
             set { SetProperty(ref currentDate, value); }
         }
 
-        private string? textBoxText = "＋ Add Task";
+        private string? textBoxText = textBoxTextConst;
         public string? TextBoxText
         {
             get { return textBoxText; }
