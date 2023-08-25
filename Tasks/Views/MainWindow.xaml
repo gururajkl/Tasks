@@ -88,7 +88,7 @@
                 Margin="0,5,0,0"
                 Padding="10"
                 BorderThickness="1"
-                Command="{Binding AddTheTask}"
+                Command="{Binding AddTheTaskFromButton}"
                 Content="Add"
                 FontSize="14">
                 <Button.Resources>
