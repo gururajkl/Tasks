@@ -3,11 +3,12 @@ using Prism.Mvvm;
 using Prism.Services.Dialogs;
 using System;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.IO;
 using System.Media;
 using System.Windows;
+using System.Windows.Forms;
 using Tasks.Models;
+using Tasks.Views;
 
 namespace Tasks.ViewModels
 {
@@ -24,8 +25,10 @@ namespace Tasks.ViewModels
         public static int incrementTheCount = 1;
         private readonly IDialogService dialogService;
         private static string textBoxTextConst = "＋ Add Task";
+        public static string? HeadingTextForNotifyIcon = "";
+        private NotifyIcon? systemTrayIcon;
 
-        public MainWindowViewModel(IDialogService dialogService)
+        public MainWindowViewModel(IDialogService? dialogService)
         {
             AddTheTask = new DelegateCommand(AddingTheTask, canExecute).ObservesProperty(() => TextBoxText);
             CheckedTheList = new DelegateCommand<object>(DeleteTheTask);
@@ -35,7 +38,8 @@ namespace Tasks.ViewModels
             Tasks = new ObservableCollection<ModelTask>();
             CompletedTasks = new ObservableCollection<ModelTask>();
 
-            this.dialogService = dialogService;
+            this.dialogService = dialogService!;
+            CreateTaskTrayIcon();
         }
 
         private void DetailViewOfTask(object SelectedTask)
@@ -84,6 +88,7 @@ namespace Tasks.ViewModels
             Tasks.Add(newTask);
             TextBoxText = string.Empty;
             UpdateUI();
+            systemTrayIcon!.ShowBalloonTip(3000, "Task Added", $"You added {newTask.TaskName}", ToolTipIcon.Info);
         }
 
         private string currentDate = DateTime.Now.ToString("MMMM dd', 'dddd");
@@ -130,6 +135,21 @@ namespace Tasks.ViewModels
             string soundFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "bell.wav");
             SoundPlayer soundPlayer = new SoundPlayer(soundFilePath);
             soundPlayer.Play();
+        }
+
+        public void CreateTaskTrayIcon()
+        {
+            systemTrayIcon = new NotifyIcon();
+            systemTrayIcon.Icon = new System.Drawing.Icon("checklist_106575.ico");
+            systemTrayIcon.Text = "Tasks";
+            systemTrayIcon.Click += SystemTrayIconClick;
+            systemTrayIcon.Visible = true;
+        }
+
+        private void SystemTrayIconClick(object? sender, EventArgs e)
+        {
+            System.Windows.Application.Current.MainWindow.WindowState = WindowState.Maximized;
+            System.Windows.Application.Current.MainWindow.Activate();
         }
     }
 }
