@@ -14,7 +14,6 @@ namespace Tasks.ViewModels
     public class MainWindowViewModel : BindableBase
     {
         public DelegateCommand AddTheTask { get; set; }
-        public DelegateCommand AddTheTaskFromButton { get; set; }
         public DelegateCommand TextboxFocused { get; set; }
         public DelegateCommand<object> CheckedTheList { get; set; }
         public DelegateCommand ClearCompletedTask { get; set; }
@@ -24,14 +23,12 @@ namespace Tasks.ViewModels
 
         public static int incrementTheCount = 1;
         private readonly IDialogService dialogService;
-        private static string textBoxTextConst = "＋ Add Task";
         public static string? HeadingTextForNotifyIcon = "";
         private NotifyIcon? systemTrayIcon;
 
         public MainWindowViewModel(IDialogService? dialogService)
         {
             AddTheTask = new DelegateCommand(AddingTheTask, canExecute).ObservesProperty(() => TextBoxText);
-            AddTheTaskFromButton = new DelegateCommand(AddingTheTaskFromAddButton, canExecute).ObservesProperty(() => TextBoxText);
             CheckedTheList = new DelegateCommand<object>(DeleteTheTask);
             TextboxFocused = new DelegateCommand(ClearTheTB);
             ClearCompletedTask = new DelegateCommand(Clear);
@@ -56,7 +53,7 @@ namespace Tasks.ViewModels
 
         private bool canExecute()
         {
-            if (string.IsNullOrEmpty(TextBoxText) || TextBoxText == textBoxTextConst) return false;
+            if (string.IsNullOrEmpty(TextBoxText)) return false;
             return true;
         }
 
@@ -93,15 +90,6 @@ namespace Tasks.ViewModels
             systemTrayIcon!.ShowBalloonTip(2000, "Task Added", $"You added {newTask.TaskName} to your task list", ToolTipIcon.Info);
         }
 
-        private void AddingTheTaskFromAddButton()
-        {
-            ModelTask newTask = new ModelTask() { TaskName = TextBoxText, Id = incrementTheCount++ };
-            Tasks.Add(newTask);
-            TextBoxText = textBoxTextConst;
-            UpdateUI();
-            systemTrayIcon!.ShowBalloonTip(2000, "Task Added", $"You added {newTask.TaskName} to your task list", ToolTipIcon.Info);
-        }
-
         private string currentDate = DateTime.Now.ToString("MMMM dd', 'dddd");
         public string CurrentDate
         {
@@ -109,7 +97,7 @@ namespace Tasks.ViewModels
             set { SetProperty(ref currentDate, value); }
         }
 
-        private string? textBoxText = textBoxTextConst;
+        private string? textBoxText;
         public string? TextBoxText
         {
             get { return textBoxText; }

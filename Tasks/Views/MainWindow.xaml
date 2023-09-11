@@ -1,39 +1,45 @@
-﻿<Window
-    x:Class="Tasks.Views.MainWindow"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:prism="http://prismlibrary.com/"
-    Title="Tasks - TODO"
-    Width="800"
-    Height="450"
-    prism:ViewModelLocator.AutoWireViewModel="True"
-    WindowState="Maximized"
-    mc:Ignorable="d">
+﻿<Window x:Class="Tasks.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:prism="http://prismlibrary.com/"
+        xmlns:customstyle="clr-namespace:Tasks.CustomStyle"
+        Title="Tasks - TODO"
+        Width="800"
+        Height="450"
+        prism:ViewModelLocator.AutoWireViewModel="True"
+        WindowState="Maximized"
+        mc:Ignorable="d">
     <Window.Resources>
-        <Style x:Key="CircularButton" TargetType="Button">
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="Foreground" Value="Black" />
+        <Style x:Key="CircularButton"
+               TargetType="Button">
+            <Setter Property="Background"
+                    Value="Transparent" />
+            <Setter Property="Foreground"
+                    Value="Black" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Grid>
-                            <Border
-                                Name="Border"
-                                Width="20"
-                                Height="20"
-                                BorderBrush="Black"
-                                BorderThickness="1"
-                                CornerRadius="10"
-                                Cursor="Hand">
-                                <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+                            <Border Name="Border"
+                                    Width="20"
+                                    Height="20"
+                                    BorderBrush="Black"
+                                    BorderThickness="1"
+                                    CornerRadius="10"
+                                    Cursor="Hand">
+                                <ContentPresenter HorizontalAlignment="Stretch"
+                                                  VerticalAlignment="Stretch" />
                             </Border>
                         </Grid>
                         <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Border" Property="Background" Value="Black" />
+                            <Trigger Property="IsMouseOver"
+                                     Value="True">
+                                <Setter TargetName="Border"
+                                        Property="Background"
+                                        Value="Black" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -49,23 +55,25 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0" Margin="0,0,0,10">
-            <TextBlock
-                x:Name="headingText"
-                FontSize="25"
-                Text="{Binding HeadingText, UpdateSourceTrigger=PropertyChanged}" />
-            <TextBlock
-                x:Name="currentDateDayText"
-                FontSize="20"
-                Text="{Binding CurrentDate}" />
+        <StackPanel Grid.Row="0"
+                    Margin="0,0,0,10">
+            <TextBlock x:Name="headingText"
+                       FontSize="25"
+                       Text="{Binding HeadingText, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBlock x:Name="currentDateDayText"
+                       FontSize="20"
+                       Text="{Binding CurrentDate}" />
         </StackPanel>
 
-        <StackPanel Grid.Row="1" Margin="0,10,0,10">
-            <TextBox
-                Name="taskTextBox"
-                Padding="10"
-                FontSize="15"
-                Text="{Binding TextBoxText, UpdateSourceTrigger=PropertyChanged}">
+        <StackPanel Grid.Row="1"
+                    Margin="0,10,0,10">
+            <customstyle:TextBoxPlaceholder x:Name="taskTextBox"
+                                            Placeholder="＋ Add Task"
+                                            Padding="10, 10"
+                                            FontSize="15"
+                                            VerticalAlignment="Center"
+                                            VerticalContentAlignment="Center"
+                                            Text="{Binding TextBoxText, UpdateSourceTrigger=PropertyChanged}">
 
                 <i:Interaction.Triggers>
                     <!--  Behaviour for TextBox got focused  -->
@@ -75,55 +83,57 @@
                 </i:Interaction.Triggers>
 
                 <TextBox.InputBindings>
-                    <KeyBinding Key="Return" Command="{Binding AddTheTask}" />
+                    <KeyBinding Key="Return"
+                                Command="{Binding AddTheTask}" />
                 </TextBox.InputBindings>
                 <TextBox.Resources>
                     <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5" />
+                        <Setter Property="CornerRadius"
+                                Value="5" />
                     </Style>
                 </TextBox.Resources>
-            </TextBox>
+            </customstyle:TextBoxPlaceholder>
 
-            <Button
-                Margin="0,5,0,0"
-                Padding="10"
-                BorderThickness="1"
-                Command="{Binding AddTheTaskFromButton}"
-                Content="Add"
-                FontSize="14">
+            <Button Margin="0,5,0,0"
+                    Padding="10"
+                    BorderThickness="1"
+                    Command="{Binding AddTheTask}"
+                    Content="Add"
+                    FontSize="14">
                 <Button.Resources>
                     <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="3" />
+                        <Setter Property="CornerRadius"
+                                Value="3" />
                     </Style>
                 </Button.Resources>
             </Button>
         </StackPanel>
 
-        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Hidden">
+        <ScrollViewer Grid.Row="2"
+                      VerticalScrollBarVisibility="Hidden">
             <StackPanel>
                 <ItemsControl ItemsSource="{Binding Tasks}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Border
-                                Margin="0,4,0,4"
-                                Padding="15"
-                                Background="#DCDCDC"
-                                CornerRadius="5">
-                                <StackPanel
-                                    VerticalAlignment="Center"
-                                    Cursor="Hand"
-                                    Orientation="Horizontal">
-                                    <Button
-                                        Margin="0,0,10,0"
-                                        Command="{Binding DataContext.CheckedTheList, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}}"
-                                        CommandParameter="{Binding}"
-                                        Content=""
-                                        Style="{StaticResource CircularButton}"
-                                        ToolTip="Mark as done" />
-                                    <TextBlock FontSize="20" Text="{Binding TaskName}" />
+                            <Border Margin="0,4,0,4"
+                                    Padding="15"
+                                    Background="#DCDCDC"
+                                    CornerRadius="5">
+                                <StackPanel VerticalAlignment="Center"
+                                            Cursor="Hand"
+                                            Orientation="Horizontal">
+                                    <Button Margin="0,0,10,0"
+                                            Command="{Binding DataContext.CheckedTheList, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}}"
+                                            CommandParameter="{Binding}"
+                                            Content=""
+                                            Style="{StaticResource CircularButton}"
+                                            ToolTip="Mark as done" />
+                                    <TextBlock FontSize="20"
+                                               Text="{Binding TaskName}" />
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="MouseLeftButtonDown">
-                                            <prism:InvokeCommandAction Command="{Binding DataContext.ClickedOnListItem, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}}" CommandParameter="{Binding}" />
+                                            <prism:InvokeCommandAction Command="{Binding DataContext.ClickedOnListItem, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}}"
+                                                                       CommandParameter="{Binding}" />
                                         </i:EventTrigger>
                                     </i:Interaction.Triggers>
                                 </StackPanel>
@@ -132,41 +142,39 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
 
-                <Expander
-                    Margin="0,10,0,10"
-                    Header="Completed Tasks"
-                    Visibility="{Binding CompletedTaskVisibility, UpdateSourceTrigger=PropertyChanged}">
+                <Expander Margin="0,10,0,10"
+                          Header="Completed Tasks"
+                          Visibility="{Binding CompletedTaskVisibility, UpdateSourceTrigger=PropertyChanged}">
                     <StackPanel>
-                        <ItemsControl Margin="0,10,0,0" ItemsSource="{Binding CompletedTasks}">
+                        <ItemsControl Margin="0,10,0,0"
+                                      ItemsSource="{Binding CompletedTasks}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <Border
-                                        Margin="0,4,0,4"
-                                        Padding="15"
-                                        Background="#DCDCDC"
-                                        CornerRadius="5">
-                                        <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
-                                            <TextBlock
-                                                Margin="0,0,5,0"
-                                                FontSize="15"
-                                                Text="✔" />
-                                            <TextBlock
-                                                FontSize="15"
-                                                Text="{Binding TaskName}"
-                                                TextDecorations="Strikethrough" />
+                                    <Border Margin="0,4,0,4"
+                                            Padding="15"
+                                            Background="#DCDCDC"
+                                            CornerRadius="5">
+                                        <StackPanel VerticalAlignment="Center"
+                                                    Orientation="Horizontal">
+                                            <TextBlock Margin="0,0,5,0"
+                                                       FontSize="15"
+                                                       Text="✔" />
+                                            <TextBlock FontSize="15"
+                                                       Text="{Binding TaskName}"
+                                                       TextDecorations="Strikethrough" />
                                         </StackPanel>
                                     </Border>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
-                        <Button
-                            Margin="0,5,0,0"
-                            Padding="8"
-                            Command="{Binding ClearCompletedTask}"
-                            Content="Delete Completed Tasks">
+                        <Button Margin="0,5,0,0"
+                                Padding="8"
+                                Command="{Binding ClearCompletedTask}"
+                                Content="Delete Completed Tasks">
                             <Button.Resources>
                                 <Style TargetType="Border">
-                                    <Setter Property="CornerRadius" Value="3" />
+                                    <Setter Property="CornerRadius"
+                                            Value="3" />
                                 </Style>
                             </Button.Resources>
                         </Button>
